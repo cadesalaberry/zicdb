@@ -172,7 +172,7 @@ public class SimpleWriter {
 
 		try {
 
-			w.addStringsToTable(linkToSongTBL, values);
+			w.addStringsToTable(albumToSongTBL, values);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

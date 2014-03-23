@@ -4,10 +4,13 @@ public class cli {
 
 	public static void main(String[] args) {
 
-		boolean adding = ((args[0].compareTo("add") == 0) && args.length == 4);
+		boolean adding = ((args[0].compareTo("new") == 0) && args.length == 4);
 
 		if (adding)
 			add(args);
+		else {
+			System.out.println("Invalid input.");
+		}
 
 	}
 

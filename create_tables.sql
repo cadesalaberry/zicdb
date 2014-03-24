@@ -6,9 +6,10 @@ DROP SCHEMA cs421g22 cascade;
 CREATE SCHEMA cs421g22;
 
 CREATE TABLE cs421g22.artists (
+	artist_id	SERIAL,
 	name		text NOT NULL,
 	website		text,
-	CONSTRAINT	pk_artists PRIMARY KEY ( name )
+	CONSTRAINT	pk_artists PRIMARY KEY ( artist_id )
 );
 
 CREATE TABLE cs421g22.collections (
@@ -21,33 +22,35 @@ CREATE TABLE cs421g22.collections (
 COMMENT ON TABLE cs421g22.collections IS 'A generic collection of songs.';
 
 CREATE TABLE cs421g22.links (
+	link_id		SERIAL,
 	url		text NOT NULL,
 	source		varchar(100) NOT NULL,
-	CONSTRAINT	pk_links PRIMARY KEY ( url )
+	CONSTRAINT	pk_links PRIMARY KEY ( link_id )
 );
 
 CREATE TABLE cs421g22.playlists (
-	collection_id	integer NOT NULL,
-	likes_count	integer DEFAULT 0 NOT NULL,
-	CONSTRAINT 	pk_playlist PRIMARY KEY ( collection_id ),
-	CONSTRAINT 	fk_playlist FOREIGN KEY ( collection_id ) REFERENCES
-	cs421g22.collections( collection_id )
+	collection_id	BIGINT UNSIGNED,
+	likes_count	BIGINT UNSIGNED DEFAULT 0 NOT NULL,
+	CONSTRAINT 	pk_playlists PRIMARY KEY ( collection_id ),
+	CONSTRAINT 	fk_playlists FOREIGN KEY ( collection_id )
+	REFERENCES	cs421g22.collections( collection_id )
 	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE cs421g22.songs (
-	song_id		integer NOT NULL,
+	song_id		SERIAL,
 	name		text ,
-	length		integer ,
-	CONSTRAINT	pk_song PRIMARY KEY ( song_id )
+	length		BIGINT UNSIGNED ,
+	CONSTRAINT	pk_songs PRIMARY KEY ( song_id )
 );
 
 
 CREATE TABLE cs421g22.users (
+	user_id		SERIAL,
 	username	varchar(100) NOT NULL,
 	password	text NOT NULL,
 	super_user	bool DEFAULT 'false' NOT NULL,
-	CONSTRAINT	pk_users PRIMARY KEY ( username )
+	CONSTRAINT	pk_users PRIMARY KEY ( user_id )
 );
 
 CREATE TABLE cs421g22.users_subscriptions (
@@ -63,7 +66,7 @@ CREATE TABLE cs421g22.users_subscriptions (
 );
 
 CREATE TABLE cs421g22.albums (
-	collection_id	integer NOT NULL,
+	collection_id	BIGINT UNSIGNED NOT NULL,
 	year		smallint ,
 	song_count	smallint NOT NULL,
 	metadata	text ,
@@ -74,7 +77,7 @@ CREATE TABLE cs421g22.albums (
 );
 
 CREATE TABLE cs421g22.link_to_song (
-	song_id		integer NOT NULL,
+	song_id		BIGINT UNSIGNED NOT NULL,
 	url		text NOT NULL,
 	CONSTRAINT	idx_link_to_song_1 UNIQUE ( song_id, url ) ,
 	CONSTRAINT	fk_link_to_song FOREIGN KEY ( song_id )
@@ -86,7 +89,7 @@ CREATE TABLE cs421g22.link_to_song (
 );
 
 CREATE TABLE cs421g22.song_by_artist (
-	song_id		integer NOT NULL,
+	song_id		BIGINT UNSIGNED NOT NULL,
 	artist_name	text NOT NULL,
 	CONSTRAINT	idx_song_by_artist UNIQUE ( song_id, artist_name ) ,
 	CONSTRAINT	fk_album_by_artist_0 FOREIGN KEY ( artist_name )
@@ -96,8 +99,8 @@ CREATE TABLE cs421g22.song_by_artist (
 );
 
 CREATE TABLE cs421g22.song_in_album (
-	song_id		integer NOT NULL,
-	album_id	integer NOT NULL,
+	song_id		BIGINT UNSIGNED NOT NULL,
+	album_id	BIGINT UNSIGNED NOT NULL,
 	CONSTRAINT	idx_song_in_album_1 UNIQUE ( song_id, album_id ) ,
 	CONSTRAINT	fk_song_in_album FOREIGN KEY ( song_id )
 	REFERENCES	cs421g22.songs( song_id ),
@@ -106,8 +109,8 @@ CREATE TABLE cs421g22.song_in_album (
 );
 
 CREATE TABLE cs421g22.song_in_playlist (
-	song_id		integer NOT NULL,
-	playlist_id	integer NOT NULL,
+	song_id		BIGINT UNSIGNED NOT NULL,
+	playlist_id	BIGINT UNSIGNED NOT NULL,
 	CONSTRAINT	idx_song_in_playlist UNIQUE ( song_id, playlist_id ) ,
 	CONSTRAINT	fk_song_in_collection FOREIGN KEY ( playlist_id )
 	REFERENCES	cs421g22.playlists( collection_id ),
@@ -116,7 +119,7 @@ CREATE TABLE cs421g22.song_in_playlist (
 );
 
 CREATE TABLE cs421g22.user_likes_playlist (
-	collection_id	integer NOT NULL,
+	collection_id	BIGINT UNSIGNED NOT NULL,
 	username	varchar(100) NOT NULL,
 	CONSTRAINT	idx_user_likes_playlist_1 UNIQUE ( collection_id, username ) ,
 	CONSTRAINT	fk_user_likes_playlist FOREIGN KEY ( collection_id )

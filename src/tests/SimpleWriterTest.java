@@ -2,6 +2,11 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -15,17 +20,30 @@ import db.SimpleWriter;
 public class SimpleWriterTest {
 
 	SimpleWriter simpleWriter = null;
-	Statement drop = null;
-	Statement populate = null;
-	Connection c = null;
+	Statement dropStmt = null;
+	Statement populateStmt = null;
+	Connection c = Connector.getConnection();
+		
+	static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		c = Connector.getTestConnection();
-		String sqlPop = "";
-		populate.executeUpdate(sqlPop);
-		populate.close();
 		simpleWriter = new SimpleWriter(c);
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		dropStmt = c.createStatement();
+		String sqlDrop = "DROP DATABASE CS421 CASCADE;";
+		dropStmt.executeUpdate(sqlDrop);
+		dropStmt.close();
+		System.out.println("db has been dropped");
+		c.close();
+		System.out.println("connection has been terminated");
+
 	}
 
 	@Test
@@ -42,18 +60,9 @@ public class SimpleWriterTest {
 
 	@Test
 	public void addSongTest() {
-		simpleWriter.addSong("testSong", 6);
+		simpleWriter.addSong((int)6, "test song", 300);
 		assertFalse(false);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		drop = c.createStatement();
-		String sqlDrop = "DROP DATABASE CS421TEST CASCADE;";
-		drop.executeUpdate(sqlDrop);
-		drop.close();
-		c.close();
-
-	}
 
 }

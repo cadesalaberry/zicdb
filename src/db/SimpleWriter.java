@@ -86,7 +86,7 @@ public class SimpleWriter {
 
 		try {
 
-			linkID = w.addToTable(linksTBL, values, "link_id");
+			linkID = w.addToTable(linksTBL, values, "url");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -102,7 +102,7 @@ public class SimpleWriter {
 	 * @param length
 	 * @return
 	 */
-	public int addSong(String name, int length) {
+	public int addSong(int song_id, String name, int length) {
 
 		ArrayList<Object> values = new ArrayList<Object>();
 		int songID = -1;

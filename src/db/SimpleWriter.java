@@ -19,10 +19,17 @@ public class SimpleWriter {
 		this("cs421g22");
 	}
 
-	public SimpleWriter(String schema) {
+	public SimpleWriter(String schemaName) {
 
-		this.schema = (schema == "") ? "" : schema + ".";
+		this.schema = (schemaName == "") ? "" : schemaName + ".";
 		w = new Writer();
+
+		linksTBL = schema + "links";
+		songsTBL = schema + "songs";
+		artistsTBL = schema + "artists";
+		linkToSongTBL = schema + "link_to_song";
+		albumToSongTBL = schema + "song_in_album";
+		artistToSongTBL = schema + "song_by_artist";
 	}
 
 	/**
@@ -43,7 +50,8 @@ public class SimpleWriter {
 
 		try {
 
-			artistID = w.addStringsToTable(artistsTBL, values, "artist_id");
+			//artistID = 
+					w.addStringsToTable(artistsTBL, values);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,7 +77,7 @@ public class SimpleWriter {
 
 		try {
 
-			linkID = w.addStringsToTable(linksTBL, values, "link_id");
+			linkID = w.addToTable(linksTBL, values, "link_id");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,7 +103,7 @@ public class SimpleWriter {
 
 		try {
 
-			songID = w.addStringsToTable(songsTBL, values, "song_id");
+			songID = w.addToTable(songsTBL, values, "song_id");
 
 		} catch (SQLException e) {
 			e.printStackTrace();

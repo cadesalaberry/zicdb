@@ -8,13 +8,16 @@ public class Connector {
 
 	private final static String url = "jdbc:postgresql://localhost:5432/CS421";
 	private final static String username = "cs421g22";
-	private final static String password = "I want to die in the sky.";
+	private final static String password = "I want to dive in the sky.";
 	private static Connection conn = null;
 
 	public static Connection getConnection() {
 		try {
+			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return conn;

@@ -22,7 +22,7 @@ public class Writer {
 
 	public void addStringsToTable(String tbName, List<Object> strings)
 			throws SQLException {
-		addStringsToTable(tbName, strings, "");
+		addToTable(tbName, strings, "");
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class Writer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int addStringsToTable(String tbName, List<Object> values,
+	public int addToTable(String tbName, List<Object> values,
 			String returning) throws SQLException {
 
 		PreparedStatement pst = null;
@@ -45,6 +45,7 @@ public class Writer {
 		int id = -1;
 
 		query = prepareInsertQuery(tbName, values.size(), returning);
+		System.out.println(query);
 
 		try {
 			conn.setAutoCommit(false);
@@ -53,18 +54,19 @@ public class Writer {
 
 			pst = fillInsertQuery(pst, values);
 
-			res = pst.executeQuery();
-
 			// Reads the answer from the db if specified
 			if (returning != "") {
+				res = pst.executeQuery();
 				res.next();
 				id = res.getInt(1);
+			} else {
+				id = pst.executeUpdate();
 			}
 
 			conn.commit();
 
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 			try {
 				// In case of exception, tries rolling back
 				conn.rollback();
@@ -96,12 +98,13 @@ public class Writer {
 	private PreparedStatement fillInsertQuery(PreparedStatement pst,
 			List<Object> values) throws SQLException {
 
-		for (int i = 1; i < values.size(); ++i) {
+		for (int i = 0; i < values.size(); ++i) {
+			System.out.println(i);
 			Object o = values.get(i);
 			if (o instanceof String)
-				pst.setString(i, (String) o);
+				pst.setString(i + 1, (String) o);
 			else if (o instanceof Integer)
-				pst.setInt(i, (Integer) o);
+				pst.setInt(i + 1, (Integer) o);
 		}
 
 		return pst;
@@ -128,7 +131,7 @@ public class Writer {
 		query += ")";
 
 		if (returning != "") {
-			query += "RETURNING " + returning;
+			query += " RETURNING " + returning;
 		}
 
 		return query;

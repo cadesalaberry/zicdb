@@ -15,9 +15,13 @@ import java.util.List;
 public class Writer {
 
 	private Connection conn = null;
-
+	
 	public Writer() {
 		conn = Connector.getConnection();
+	}
+	
+	public Writer(Connection connection) {
+		conn = connection;
 	}
 
 	public void addStringsToTable(String tbName, List<Object> strings)

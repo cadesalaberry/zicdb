@@ -1,5 +1,6 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,11 +19,19 @@ public class SimpleWriter {
 	public SimpleWriter() {
 		this("cs421g22");
 	}
-
+	
+	public SimpleWriter(Connection connector) {
+		this(connector, "cs421g22");
+	}
+	
 	public SimpleWriter(String schemaName) {
+		this(Connector.getConnection(), "cs421g22");
+	}
+
+	public SimpleWriter(Connection connection, String schemaName) {
 
 		this.schema = (schemaName == "") ? "" : schemaName + ".";
-		w = new Writer();
+		w = new Writer(connection);
 
 		linksTBL = schema + "links";
 		songsTBL = schema + "songs";

@@ -13,14 +13,13 @@ CONSTRAINT pk_artists PRIMARY KEY ( name )
 );
 CREATE TABLE cs421g22.collections (
 collection_id
-integer NOT NULL,
+SERIAL PRIMARY KEY,
 name
 text NOT NULL,
 genre
 text ,
 creation_date
-date DEFAULT current_date NOT NULL,
-CONSTRAINT pk_collection PRIMARY KEY ( collection_id )
+date DEFAULT current_date NOT NULL
 );
 COMMENT ON TABLE cs421g22.collections IS 'A generic collection of songs.';
 CREATE TABLE cs421g22.links (

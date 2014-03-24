@@ -22,5 +22,17 @@ public class Connector {
 		}
 		return conn;
 	}
+	
+	public static Connection getTestConnection() {
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection(url + "TEST", username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
 
 }

@@ -35,7 +35,7 @@ public class SimpleWriter {
 	 */
 	public int addArtist(String name, String website) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 		int artistID = -1;
 
 		values.add(name);
@@ -61,7 +61,7 @@ public class SimpleWriter {
 	 */
 	public int addLink(String linkURL, String provider) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 		int linkID = -1;
 
 		values.add(linkURL);
@@ -87,7 +87,7 @@ public class SimpleWriter {
 	 */
 	public int addSong(String name, int length) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 		int songID = -1;
 
 		values.add(name);
@@ -113,7 +113,7 @@ public class SimpleWriter {
 	 */
 	public boolean matchLinkToSong(int songID, int linkID) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 
 		values.add(songID);
 		values.add(linkID);
@@ -139,7 +139,7 @@ public class SimpleWriter {
 	 */
 	public boolean matchArtistToSong(int songID, int artistID) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 
 		values.add(songID);
 		values.add(artistID);
@@ -165,7 +165,7 @@ public class SimpleWriter {
 	 */
 	public boolean matchAlbumToSong(int songID, int albumID) {
 
-		ArrayList<Object> values = new ArrayList<>();
+		ArrayList<Object> values = new ArrayList<Object>();
 
 		values.add(songID);
 		values.add(albumID);

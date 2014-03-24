@@ -21,7 +21,7 @@ public class SimpleWriter {
 
 	public SimpleWriter(String schema) {
 
-		this.schema = schema == "" ? "" : schema + ".";
+		this.schema = (schema == "") ? "" : schema + ".";
 		w = new Writer();
 	}
 

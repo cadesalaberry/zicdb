@@ -1,7 +1,3 @@
--- Dropping Database
-DROP SCHEMA cs421g22 cascade;
-
-
 -- Table Creation
 CREATE SCHEMA cs421g22;
 
@@ -29,15 +25,6 @@ CREATE TABLE cs421g22.links (
     CONSTRAINT  pk_links PRIMARY KEY ( link_id )
 );
 
-CREATE TABLE cs421g22.playlists (
-    collection_id   BIGINT UNSIGNED,
-    likes_count     BIGINT UNSIGNED DEFAULT 0 NOT NULL,
-    CONSTRAINT      pk_playlists PRIMARY KEY ( collection_id ),
-    CONSTRAINT      fk_playlists FOREIGN KEY ( collection_id )
-    REFERENCES      cs421g22.collections( collection_id )
-    ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE cs421g22.songs (
     song_id     BIGINT UNSIGNED,
     name        text ,
@@ -54,27 +41,36 @@ CREATE TABLE cs421g22.users (
     CONSTRAINT  pk_users PRIMARY KEY ( user_id )
 );
 
+CREATE TABLE cs421g22.playlists (
+    playlist_id BIGINT UNSIGNED,
+    likes_count BIGINT UNSIGNED DEFAULT 0 NOT NULL,
+    CONSTRAINT  pk_playlists PRIMARY KEY ( playlist_id ),
+    CONSTRAINT  fk_playlists FOREIGN KEY ( playlist_id )
+    REFERENCES  cs421g22.collections( collection_id )
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE cs421g22.albums (
+    album_id    BIGINT UNSIGNED NOT NULL,
+    year        smallint ,
+    song_count  smallint NOT NULL,
+    metadata    text ,
+    CONSTRAINT  pk_albums PRIMARY KEY ( album_id ),
+    CONSTRAINT  fk_albums FOREIGN KEY ( album_id )
+    REFERENCES  cs421g22.collections( collection_id )
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE cs421g22.users_subscriptions (
-    since       timestamp DEFAULT current_timestamp ,
     subscriber  BIGINT UNSIGNED NOT NULL,
     subscribee  BIGINT UNSIGNED NOT NULL,
+    since       timestamp DEFAULT current_timestamp ,
     CONSTRAINT  idx_users_subscriptions_0 UNIQUE ( subscriber, subscribee ) ,
     CONSTRAINT  fk_users_subscriptions FOREIGN KEY ( subscriber )
     REFERENCES  cs421g22.users( user_id )
     ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT  fk_users_subscriptions_0 FOREIGN KEY ( subscribee )
     REFERENCES  cs421g22.users( user_id )
-);
-
-CREATE TABLE cs421g22.albums (
-    collection_id   BIGINT UNSIGNED NOT NULL,
-    year            smallint ,
-    song_count      smallint NOT NULL,
-    metadata        text ,
-    CONSTRAINT      pk_albums PRIMARY KEY ( collection_id ),
-    CONSTRAINT      fk_albums FOREIGN KEY ( collection_id )
-    REFERENCES      cs421g22.collections( collection_id )
-    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE cs421g22.song_has_link (
@@ -120,13 +116,26 @@ CREATE TABLE cs421g22.song_in_playlist (
 );
 
 CREATE TABLE cs421g22.user_likes_playlist (
-    collection_id   BIGINT UNSIGNED NOT NULL,
-    user_id         BIGINT UNSIGNED NOT NULL,
-    CONSTRAINT      idx_user_likes_playlist_1 UNIQUE ( collection_id, user_id ) ,
-    CONSTRAINT      fk_user_likes_playlist FOREIGN KEY ( collection_id )
-    REFERENCES      cs421g22.playlists( collection_id )
+    user_id     BIGINT UNSIGNED NOT NULL,
+    playlist_id BIGINT UNSIGNED NOT NULL,
+    CONSTRAINT  idx_user_likes_playlist_1 UNIQUE ( playlist_id, user_id ) ,
+    CONSTRAINT  fk_user_likes_playlist FOREIGN KEY ( playlist_id )
+    REFERENCES  cs421g22.playlists( playlist_id )
     ON UPDATE CASCADE,
-    CONSTRAINT      fk_user_likes_playlist_0 FOREIGN KEY ( user_id )
-    REFERENCES      cs421g22.users( user_id )
+    CONSTRAINT  fk_user_likes_playlist_0 FOREIGN KEY ( user_id )
+    REFERENCES  cs421g22.users( user_id )
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE cs421g22.user_has_playlist (
+    user_id     BIGINT UNSIGNED NOT NULL,
+    playlist_id BIGINT UNSIGNED NOT NULL,
+    since       timestamp DEFAULT current_timestamp,
+    CONSTRAINT  idx_user_likes_playlist_1 UNIQUE ( playlist_id, user_id ) ,
+    CONSTRAINT  fk_user_likes_playlist FOREIGN KEY ( playlist_id )
+    REFERENCES  cs421g22.playlists( playlist_id )
+    ON UPDATE CASCADE,
+    CONSTRAINT  fk_user_likes_playlist_0 FOREIGN KEY ( user_id )
+    REFERENCES  cs421g22.users( user_id )
     ON UPDATE CASCADE
 );

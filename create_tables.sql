@@ -6,23 +6,24 @@ DROP SCHEMA cs421g22 cascade;
 CREATE SCHEMA cs421g22;
 
 CREATE TABLE cs421g22.artists (
-    artist_id   SERIAL,
+    artist_id   BIGINT UNSIGNED,
     name        text NOT NULL,
     website     text,
     CONSTRAINT  pk_artists PRIMARY KEY ( artist_id )
 );
 
 CREATE TABLE cs421g22.collections (
-    collection_id   SERIAL PRIMARY KEY,
+    collection_id   BIGINT UNSIGNED,
     name            text NOT NULL,
     genre           text ,
-    creation_date   date DEFAULT current_date NOT NULL
+    creation_date   date DEFAULT current_date NOT NULL,
+    CONSTRAINT  pk_collections PRIMARY KEY ( collection_id )
 );
 
 COMMENT ON TABLE cs421g22.collections IS 'A generic collection of songs.';
 
 CREATE TABLE cs421g22.links (
-    link_id     SERIAL,
+    link_id     BIGINT UNSIGNED,
     url         text NOT NULL,
     source      varchar(100) NOT NULL,
     CONSTRAINT  pk_links PRIMARY KEY ( link_id )
@@ -38,7 +39,7 @@ CREATE TABLE cs421g22.playlists (
 );
 
 CREATE TABLE cs421g22.songs (
-    song_id     SERIAL,
+    song_id     BIGINT UNSIGNED,
     name        text ,
     length      BIGINT UNSIGNED ,
     CONSTRAINT  pk_songs PRIMARY KEY ( song_id )
@@ -46,7 +47,7 @@ CREATE TABLE cs421g22.songs (
 
 
 CREATE TABLE cs421g22.users (
-    user_id     SERIAL,
+    user_id     BIGINT UNSIGNED,
     username    varchar(100) NOT NULL,
     password    text NOT NULL,
     super_user  bool DEFAULT 'false' NOT NULL,
@@ -76,14 +77,14 @@ CREATE TABLE cs421g22.albums (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE cs421g22.link_to_song (
+CREATE TABLE cs421g22.song_has_link (
     song_id     BIGINT UNSIGNED NOT NULL,
     link_id     BIGINT UNSIGNED NOT NULL,
-    CONSTRAINT  idx_link_to_song_1 UNIQUE ( song_id, link_id ) ,
-    CONSTRAINT  fk_link_to_song FOREIGN KEY ( song_id )
+    CONSTRAINT  idx_song_has_link_1 UNIQUE ( song_id, link_id ) ,
+    CONSTRAINT  fk_song_has_link FOREIGN KEY ( song_id )
     REFERENCES  cs421g22.songs( song_id )
     ON UPDATE CASCADE,
-    CONSTRAINT  fk_link_to_song_0 FOREIGN KEY ( link_id )
+    CONSTRAINT  fk_song_has_link_0 FOREIGN KEY ( link_id )
     REFERENCES  cs421g22.links( link_id )
     ON UPDATE CASCADE
 );

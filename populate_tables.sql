@@ -146,8 +146,8 @@ INSERT INTO cs421g22.users VALUES (3, 'god', 'zoop', 'true');
 
 -- Ben Playlists
 
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 2, 0);
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 2, 1);
+INSERT INTO cs421g22.users_subscriptions VALUES (2, 0, CURRENT_DATE);
+INSERT INTO cs421g22.users_subscriptions VALUES (2, 1, CURRENT_DATE);
 
 INSERT INTO cs421g22.collections VALUES (10, 'La Vie Est Belle', 'Pop', '2011-09-09');
 INSERT INTO cs421g22.playlists VALUES (10,1);
@@ -182,7 +182,7 @@ INSERT INTO cs421g22.user_likes_playlist VALUES (13, 3);
 
 -- Finkel Playlists
 
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 1, 3);
+INSERT INTO cs421g22.users_subscriptions VALUES (1, 3, CURRENT_DATE);
 
 INSERT INTO cs421g22.collections VALUES (14, 'Siamese Future', 'Rock', '2011-05-09');
 INSERT INTO cs421g22.playlists VALUES (14,3);
@@ -202,7 +202,7 @@ INSERT INTO cs421g22.user_likes_playlist VALUES (14, 3);
 
 -- Carlos Playlists
 
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 0, 2);
+INSERT INTO cs421g22.users_subscriptions VALUES (0, 2, CURRENT_DATE);
 
 INSERT INTO cs421g22.collections VALUES (15, 'Friday is great', 'Pop', '2011-09-04');
 INSERT INTO cs421g22.playlists VALUES (15,1);
@@ -225,6 +225,6 @@ INSERT INTO cs421g22.user_likes_playlist VALUES (16, 1);
 
 -- God Playlists
 
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 3, 0);
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 3, 1);
-INSERT INTO cs421g22.users_subscriptions VALUES (CURRENT_DATE, 3, 2);
+INSERT INTO cs421g22.users_subscriptions VALUES (3, 0, CURRENT_DATE);
+INSERT INTO cs421g22.users_subscriptions VALUES (3, 1, CURRENT_DATE);
+INSERT INTO cs421g22.users_subscriptions VALUES (3, 2, CURRENT_DATE);

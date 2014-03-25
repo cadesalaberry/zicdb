@@ -1,4 +1,3 @@
--- Table Creation
 CREATE SCHEMA cs421g22;
 
 CREATE TABLE cs421g22.artists (

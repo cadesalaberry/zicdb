@@ -16,10 +16,6 @@ public class Writer {
 
 	private Connection conn = null;
 	
-	public Writer() {
-		conn = Connector.getConnection();
-	}
-	
 	public Writer(Connection connection) {
 		conn = connection;
 	}

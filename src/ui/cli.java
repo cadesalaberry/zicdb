@@ -144,6 +144,7 @@ public class cli {
 					String password_conf = keyb.nextLine();
 
 					if (input.equals(password_conf)) {
+						signUpUser(user, password_conf);
 						System.out.println("Account created successfully!");
 						state = State.INDEX;
 					} else {
@@ -341,6 +342,17 @@ public class cli {
 	 */
 	public static boolean isValidUser(String username, String password) {
 		return ac.loginUser(username, password) != -1;
+	}
+	
+	/**
+	 * Signs up a user.
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public static boolean signUpUser(String username, String password) {
+		return ac.signUp(username, password);
 	}
 
 	/**

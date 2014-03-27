@@ -18,8 +18,8 @@ public class Account {
 
 	public int loginUser(String username, String pass) {
 
-		String query = "SELECT user_id FROM users WHERE username = " + username
-				+ " AND password = " + pass + ";";
+		String query = "SELECT user_id FROM cs421g22.users WHERE username = '" + username
+				+ "' AND password = '" + pass + "';";
 
 		List<String> list = columnFromQuery("user_id", query);
 
@@ -34,7 +34,7 @@ public class Account {
 
 	public boolean userExists(String username) {
 
-		String query = "SELECT user_id FROM users WHERE username = " + username + ";";
+		String query = "SELECT user_id, username FROM cs421g22.users U WHERE U.username = '" + username + "';";
 
 		List<String> list = columnFromQuery("user_id", query);
 
@@ -49,14 +49,15 @@ public class Account {
 
 	public int getNextId(String tableName) {
 
-		String query = "SELECT MAX(id) as max_val FROM " + tableName + ";";
+		String query = "SELECT MAX(user_id) as max_val FROM " + tableName + ";";
 
 		List<String> list = columnFromQuery("max_val", query);
 
 		if (list == null || list.size() < 1) {
 			return -1;
 		}
-
+		
+		System.out.println("" + list + list.size());
 		int id = Integer.parseInt(list.get(0));
 
 		return id + 1;
@@ -65,7 +66,7 @@ public class Account {
 	public boolean signUp(String username, String password) {
 		if (!userExists(username)) {
 			
-			String id = String.valueOf(getNextId("users"));
+			String id = String.valueOf(getNextId("cs421g22.users"));
 			ArrayList<Object> list = new ArrayList<Object>();
 			
 			list.add(id);
@@ -73,7 +74,7 @@ public class Account {
 			list.add(password);
 			
 			try {
-				w.getWriter().addStringsToTable("users", list);
+				w.getWriter().addStringsToTable("cs421g22.users", list);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return false;
@@ -88,6 +89,7 @@ public class Account {
 		ResultSet rs = null;
 
 		try {
+			
 			rs = conn.prepareStatement(query).executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();

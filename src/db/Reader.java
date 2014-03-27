@@ -17,20 +17,85 @@ public class Reader {
 		conn = connection;
 	}
 
-	private List<String> getPlaylistFromUsername(String username) {
+	/**
+	 * Returns the names of playlist belonging to a given user.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	public List<String> getPlaylistsFromUsername(String username) {
 
 		String query = "SELECT C.collection_id, C.name"
 				+ " FROM  collections C, user_has_playlist P, users U"
 				+ " WHERE C.collection_id = P.collection_id"
-				+ " AND   P.user_id = U.user_id" + " AND   U.username = ?;";
-		
-		List<HashMap<String, String>> hList = resultSetToHashList(rst);
-		return columnFromHashList(username, hList);
+				+ " AND   P.user_id = U.user_id" + " AND   U.username = "
+				+ username + ";";
+
+		return getColumnFromQuery("C.name", query);
 	}
 
+	/**
+	 * Returns the names of songs inside a given playlist.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	public List<String> getSongsFromPlaylist(String playlistName) {
+
+		String query = "SELECT S.song_id, S.name"
+				+ " FROM songs S, song_in_playlist SP, playlist P, collections C"
+				+ " WHERE S.song_id = SP.song_id"
+				+ " AND   SP.playlist_id = P.playlist_id"
+				+ " AND   P.playlist_id = C.collection_id"
+				+ " AND   C.name = ?;" + playlistName + ";";
+
+		return getColumnFromQuery("S.name", query);
+	}
+
+	/**
+	 * Returns the names of albums belonging to a given artist.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	public List<String> getAlbumsFromArtist(String artistName) {
+
+		String query = "SELECT C.collection_id, C.name"
+				+ " FROM collections C, user_has_playlist P, users U"
+				+ " WHERE C.collection_id = P.collection_id"
+				+ " AND   P.user_id = U.user_id" + " AND   U.username = "
+				+ artistName + ";";
+
+		return getColumnFromQuery("C.name", query);
+	}
+
+	/**
+	 * Returns the names of albums belonging to a given artist.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	public List<String> getSongsFromAlbum(String albumName) {
+
+		String query = "SELECT S.song_id S.name"
+				+ "FROM songs S, song_in_album SA, albums A, collections C"
+				+ "WHERE S.song_id = SA.song_id"
+				+ "AND   SA.album_id = A.album_id"
+				+ "AND   A.album_id = C.collection_id" + "AND   C.name = "
+				+ albumName + ";";
+
+		return getColumnFromQuery("S.name", query);
+	}
+
+	/**
+	 * Helper to turn a result set into a list.
+	 * 
+	 * @param colName
+	 * @param query
+	 * @return
+	 */
 	private List<String> getColumnFromQuery(String colName, String query) {
 
-		List<String> list = new ArrayList<String>();
 		PreparedStatement pst = null;
 		ResultSet rst = null;
 
@@ -38,15 +103,24 @@ public class Reader {
 			pst = conn.prepareStatement(query);
 			pst.setString(1, colName);
 			rst = pst.executeQuery();
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return list;
+		List<HashMap<String, String>> hList = resultSetToHashList(rst);
+
+		return getColumnFromHashList(colName, hList);
 	}
 
-	private List<String> columnFromHashList(String colName,
+	/**
+	 * Turns a hashlist into a simple list.
+	 * 
+	 * @param colName
+	 * @param hList
+	 * @return
+	 */
+	private List<String> getColumnFromHashList(String colName,
 			List<HashMap<String, String>> hList) {
 
 		List<String> list = new ArrayList<String>();

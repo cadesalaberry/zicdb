@@ -16,9 +16,9 @@ public class Account {
 		this.w = w;
 	}
 
-	public int loginUser(String email, String pass) {
+	public int loginUser(String username, String pass) {
 
-		String query = "SELECT user_id FROM users WHERE email = " + email
+		String query = "SELECT user_id FROM users WHERE email = " + username
 				+ " AND password = " + pass + ";";
 
 		List<String> list = columnFromQuery("user_id", query);
@@ -32,9 +32,9 @@ public class Account {
 		return id;
 	}
 
-	public boolean existsUser(String email) {
+	public boolean userExists(String username) {
 
-		String query = "SELECT user_id FROM users WHERE email = " + email + ";";
+		String query = "SELECT user_id FROM users WHERE email = " + username + ";";
 
 		List<String> list = columnFromQuery("user_id", query);
 
@@ -63,7 +63,7 @@ public class Account {
 	}
 
 	public boolean signUp(String username, String password) {
-		if (!existsUser(username)) {
+		if (!userExists(username)) {
 			
 			String id = String.valueOf(getNextId("users"));
 			ArrayList<Object> list = new ArrayList<Object>();

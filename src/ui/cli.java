@@ -2,6 +2,7 @@ package ui;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import db.Account;
@@ -385,8 +386,8 @@ public class cli {
 		System.out.println("--- VIEWING ALL SONGS in album -- " + albumID + "--");
 		
 		// TODO: change to artistID
-		for (String name : r.getAlbumsFromArtist(albumID)) {
-			System.out.println(name);
+		for (HashMap<String, String> a : r.getAlbumsFromArtist(albumID)) {
+			System.out.println(a.get("album_id") + "\t" + a.get("name"));
 		}
 	}
 

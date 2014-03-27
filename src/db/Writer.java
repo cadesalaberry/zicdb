@@ -46,6 +46,9 @@ public class Writer {
 
 		query = prepareInsertQuery(tbName, values.size(), returning);
 		System.out.println(query);
+		for (Object o : values) {
+			System.out.println("obj: " + o);
+		}
 
 		try {
 			conn.setAutoCommit(false);

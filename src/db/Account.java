@@ -50,7 +50,7 @@ public class Account {
 
 	public int getNextId(String tableName) {
 
-		String query = "SELECT MAX(user_id) as max_val FROM " + tableName + ";";
+		String query = "SELECT MAX(user_id) FROM " + tableName + ";";
 
 		List<HashMap<String, String>> list = columnsFromQuery(query);
 
@@ -59,7 +59,10 @@ public class Account {
 		}
 		
 		System.out.println("" + list + list.size());
-		int id = Integer.parseInt(list.get(0).get("max_value"));
+		int id = 0;
+		if (list.get(0).get("max") != null) {
+			id = Integer.parseInt(list.get(0).get("max"));
+		}
 
 		return id + 1;
 	}

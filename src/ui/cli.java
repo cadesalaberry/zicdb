@@ -9,7 +9,7 @@ import java.util.Scanner;
  * 
  */
 public class cli {
-	
+
 	public enum State {
 		INDEX, HOME, SIGNIN, SIGNUP, VIEWARTISTS, VIEWALBUMS, VIEWALBUM, ADDSONG, VIEWPLAYLISTS, VIEWLIKEDPLAYLIST, VIEWLIKEDPLAYLISTS, VIEWPLAYLIST, VIEWMYPLAYLISTS, VIEWMYPLAYLIST, CREATEPLAYLIST
 	}
@@ -19,19 +19,21 @@ public class cli {
 
 	public static void main(String[] args) {
 
-		String user = "benj";
-		String password = "poopoo";
-		int artist = 0;
-		int album = 0;
-		int playlist = 0;
+		Scanner keyb = new Scanner(System.in);
 
-		String input;
+		State state = State.INDEX;
 
 		boolean quit = false;
-		State state = State.INDEX;
-		Scanner keyb = new Scanner(System.in);
+
+		String user = "benj";
+		String input;
+
+		int playlist = 0;
+		int artist = 0;
+		int album = 0;
+
 		System.out
-				.println("Welcome to ZicDb. Where all you zicz are belong to us ");
+				.println("Welcome to ZicDb. Where all you zicz belong to us ");
 		while (!quit) {
 			switch (state) {
 			case INDEX:
@@ -125,12 +127,12 @@ public class cli {
 					state = State.INDEX;
 				} else {
 					System.out.print("Choose a password: ");
-					password = keyb.nextLine();
+					input = keyb.nextLine();
 
 					System.out.print("Confirm  password: ");
 					String password_conf = keyb.nextLine();
 
-					if (password.equals(password_conf)) {
+					if (input.equals(password_conf)) {
 						System.out.println("Account created successfully!");
 						state = State.INDEX;
 					} else {

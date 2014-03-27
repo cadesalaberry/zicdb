@@ -18,7 +18,7 @@ public class Account {
 
 	public int loginUser(String username, String pass) {
 
-		String query = "SELECT user_id FROM users WHERE email = " + username
+		String query = "SELECT user_id FROM users WHERE username = " + username
 				+ " AND password = " + pass + ";";
 
 		List<String> list = columnFromQuery("user_id", query);
@@ -34,7 +34,7 @@ public class Account {
 
 	public boolean userExists(String username) {
 
-		String query = "SELECT user_id FROM users WHERE email = " + username + ";";
+		String query = "SELECT user_id FROM users WHERE username = " + username + ";";
 
 		List<String> list = columnFromQuery("user_id", query);
 

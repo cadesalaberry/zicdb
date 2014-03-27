@@ -1,6 +1,7 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -16,48 +17,51 @@ public class Reader {
 		conn = connection;
 	}
 
-	private List<String> getUserRecipe(int userId) {
-		
-		List<HashMap<String, String>> resultSet = conn.prepareStatement(
-				"SELECT name FROM recipe WHERE user_id = " +
-				String.valueOf(userId)).executeUpdate();
-		
-		List<String> list = new ArrayList<String>();
+	private List<String> getPlaylistFromUsername(String username) {
 
-		for (HashMap<String, String> map : resultSet) {
-			list.add(map.get("name"));
+		String query = "SELECT C.collection_id, C.name"
+				+ " FROM  collections C, user_has_playlist P, users U"
+				+ " WHERE C.collection_id = P.collection_id"
+				+ " AND   P.user_id = U.user_id" + " AND   U.username = ?;";
+		
+		List<HashMap<String, String>> hList = resultSetToHashList(rst);
+		return columnFromHashList(username, hList);
+	}
+
+	private List<String> getColumnFromQuery(String colName, String query) {
+
+		List<String> list = new ArrayList<String>();
+		PreparedStatement pst = null;
+		ResultSet rst = null;
+
+		try {
+			pst = conn.prepareStatement(query);
+			pst.setString(1, colName);
+			rst = pst.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return list;
 	}
-	
-	/**
-	 * Builds the query from the given values.
-	 * 
-	 * @param tbName
-	 * @param size
-	 * @param returning
-	 * @return
-	 */
-	private String prepareSelectQuery(String tbName, int size, String returning) {
-		
-		String query = "";
 
-		query += "SELECT (?"; 
+	private List<String> columnFromHashList(String colName,
+			List<HashMap<String, String>> hList) {
 
-		for (int i = 1; i < size; ++i) {
-			query += ",?";
+		List<String> list = new ArrayList<String>();
+
+		for (HashMap<String, String> map : hList) {
+			list.add(map.get(colName));
 		}
 
-		query += ") FROM " + tbName + ")";
-
-		return query;
+		return list;
 	}
-	
-	
+
 	/**
 	 * Convert a result set entity to a hash list.
-	 * https://github.com/timcolonel/comp421-project-d3/blob/master/src/main/SQLConnection.java
+	 * https://github.com/timcolonel/
+	 * comp421-project-d3/blob/master/src/main/SQLConnection.java
 	 * 
 	 * @author timcolonel
 	 * @param rs

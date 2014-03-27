@@ -414,10 +414,12 @@ public class cli {
 				+ " -- ");
 	}
 
-	public static void viewPlaylist(int playlist) {
-		System.out.println("--- VIEWING ALL SONGS in playlist -- " + playlist
+	public static void viewPlaylist(int playlistID) {
+		System.out.println("--- VIEWING ALL SONGS in playlist -- " + playlistID
 				+ "--");
-		r.getSongsFromPlaylist(playlist);
+		for (HashMap<String, String> h : r.getSongsFromPlaylist(playlistID)) {
+			System.out.println(h.get("playlist_id") + "\t" + h.get("name"));
+		}
 	}
 
 	public static void likePlaylist(String user, int playlist) {

@@ -1,7 +1,6 @@
 package db;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -23,14 +22,14 @@ public class Reader {
 	 * @param username
 	 * @return
 	 */
-	public List<String> getAlbumsFromUserID(int userID) {
+	public List<HashMap<String, String>> getAlbumsFromUserID(int userID) {
 
 		String query = "SELECT C.collection_id, C.name"
 				+ " FROM collections C, user_has_playlist P, users U"
 				+ " WHERE C.collection_id = P.collection_id"
 				+ " AND   P.user_id = "	+ userID + ";";
 
-		return getColumnFromQuery("C.name", query);
+		return getColumnsFromQuery(query);
 	}
 
 	/**
@@ -56,14 +55,14 @@ public class Reader {
 	 * @param username
 	 * @return
 	 */
-	public List<String> getAlbumsFromArtist(int artistID) {
+	public List<HashMap<String, String>> getAlbumsFromArtist(int artistID) {
 
 		String query = "SELECT C.collection_id, C.name"
 				+ " FROM collections C, user_has_playlist P, users U"
 				+ " WHERE C.collection_id = P.collection_id"
 				+ " AND   P.user_id = "	+ artistID + ";";
 
-		return getColumnFromQuery("C.name", query);
+		return getColumnsFromQuery(query);
 	}
 
 	/**
@@ -83,15 +82,12 @@ public class Reader {
 		return getColumnsFromQuery(query);
 	}
 
-	private List<HashMap<String, String>> getColumnsFromQuery(String query) {
+	public List<HashMap<String, String>> getColumnsFromQuery(String query) {
 
-		PreparedStatement pst = null;
 		ResultSet rst = null;
 
 		try {
-			pst = conn.prepareStatement(query);
-			pst.setString(1, "*");
-			rst = pst.executeQuery();
+			rst = conn.prepareStatement(query).executeQuery();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -107,7 +103,7 @@ public class Reader {
 	 * @param query
 	 * @return
 	 */
-	private List<String> getColumnFromQuery(String colName, String query) {
+	public List<String> getColumnFromQuery(String colName, String query) {
 
 		List<HashMap<String, String>> hList = getColumnsFromQuery(query);
 		

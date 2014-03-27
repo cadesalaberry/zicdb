@@ -1,12 +1,13 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.sql.Connection;
 
 import org.junit.Test;
 
 import db.Connector;
+
 
 public class ConnectorTest {
 

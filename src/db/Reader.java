@@ -18,18 +18,17 @@ public class Reader {
 	}
 
 	/**
-	 * Returns the names of playlist belonging to a given user.
+	 * Returns the names of albums belonging to a given artist.
 	 * 
 	 * @param username
 	 * @return
 	 */
-	public List<String> getPlaylistsFromUsername(String username) {
+	public List<String> getAlbumsFromUserID(int userID) {
 
 		String query = "SELECT C.collection_id, C.name"
-				+ " FROM  collections C, user_has_playlist P, users U"
+				+ " FROM collections C, user_has_playlist P, users U"
 				+ " WHERE C.collection_id = P.collection_id"
-				+ " AND   P.user_id = U.user_id" + " AND   U.username = "
-				+ username + ";";
+				+ " AND   P.user_id = "	+ userID + ";";
 
 		return getColumnFromQuery("C.name", query);
 	}
@@ -40,16 +39,15 @@ public class Reader {
 	 * @param username
 	 * @return
 	 */
-	public List<String> getSongsFromPlaylist(String playlistName) {
+	public List<HashMap<String, String>> getSongsFromPlaylist(int playlistID) {
 
 		String query = "SELECT S.song_id, S.name"
 				+ " FROM songs S, song_in_playlist SP, playlist P, collections C"
 				+ " WHERE S.song_id = SP.song_id"
 				+ " AND   SP.playlist_id = P.playlist_id"
-				+ " AND   P.playlist_id = C.collection_id"
-				+ " AND   C.name = ?;" + playlistName + ";";
+				+ " AND   P.playlist_id = " + playlistID + ";";
 
-		return getColumnFromQuery("S.name", query);
+		return getColumnsFromQuery(query);
 	}
 
 	/**
@@ -58,13 +56,12 @@ public class Reader {
 	 * @param username
 	 * @return
 	 */
-	public List<String> getAlbumsFromArtist(String artistName) {
+	public List<String> getAlbumsFromArtist(int artistID) {
 
 		String query = "SELECT C.collection_id, C.name"
 				+ " FROM collections C, user_has_playlist P, users U"
 				+ " WHERE C.collection_id = P.collection_id"
-				+ " AND   P.user_id = U.user_id" + " AND   U.username = "
-				+ artistName + ";";
+				+ " AND   P.user_id = "	+ artistID + ";";
 
 		return getColumnFromQuery("C.name", query);
 	}
@@ -75,16 +72,32 @@ public class Reader {
 	 * @param username
 	 * @return
 	 */
-	public List<String> getSongsFromAlbum(String albumName) {
+	public List<HashMap<String, String>> getSongsFromAlbum(int albumID) {
 
 		String query = "SELECT S.song_id S.name"
 				+ "FROM songs S, song_in_album SA, albums A, collections C"
 				+ "WHERE S.song_id = SA.song_id"
 				+ "AND   SA.album_id = A.album_id"
-				+ "AND   A.album_id = C.collection_id" + "AND   C.name = "
-				+ albumName + ";";
+				+ "AND   A.album_id = " + albumID + ";";
 
-		return getColumnFromQuery("S.name", query);
+		return getColumnsFromQuery(query);
+	}
+
+	private List<HashMap<String, String>> getColumnsFromQuery(String query) {
+
+		PreparedStatement pst = null;
+		ResultSet rst = null;
+
+		try {
+			pst = conn.prepareStatement(query);
+			pst.setString(1, "*");
+			rst = pst.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return resultSetToHashList(rst);
 	}
 
 	/**
@@ -96,20 +109,8 @@ public class Reader {
 	 */
 	private List<String> getColumnFromQuery(String colName, String query) {
 
-		PreparedStatement pst = null;
-		ResultSet rst = null;
-
-		try {
-			pst = conn.prepareStatement(query);
-			pst.setString(1, colName);
-			rst = pst.executeQuery();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		List<HashMap<String, String>> hList = resultSetToHashList(rst);
-
+		List<HashMap<String, String>> hList = getColumnsFromQuery(query);
+		
 		return getColumnFromHashList(colName, hList);
 	}
 

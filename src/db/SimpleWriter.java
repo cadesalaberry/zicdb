@@ -19,11 +19,11 @@ public class SimpleWriter {
 	public SimpleWriter() {
 		this("cs421g22");
 	}
-	
+
 	public SimpleWriter(Connection connector) {
 		this(connector, "cs421g22");
 	}
-	
+
 	public SimpleWriter(String schemaName) {
 		this(Connector.getConnection(), "cs421g22");
 	}
@@ -59,8 +59,8 @@ public class SimpleWriter {
 
 		try {
 
-			//artistID = 
-					w.addStringsToTable(artistsTBL, values);
+			// artistID =
+			w.addStringsToTable(artistsTBL, values);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -199,4 +199,19 @@ public class SimpleWriter {
 		return true;
 	}
 
+	public Writer getWriter() {
+		return w;
+	}
+
+	public void setWriter(Writer w) {
+		this.w = w;
+	}
+	
+	public void unlikePlaylistFromUser(int playlist, String user) {
+		//TODO: fill in
+	}
+	
+	public void likePlaylistFromUser(int playlist, String user) {
+		//TODO: fill in
+	}
 }

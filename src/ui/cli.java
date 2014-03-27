@@ -1,6 +1,13 @@
 package ui;
 
+import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Scanner;
+
+import db.Account;
+import db.Connector;
+import db.Reader;
+import db.SimpleWriter;
 
 /**
  * A low level DB writer for postgreSQL.
@@ -17,10 +24,14 @@ public class cli {
 	public static final String DEFAULT_USER = "benj";
 	public static final String DEFAULT_PASS = "poops";
 
+	public static Connection conn = Connector.getConnection();
+	public static SimpleWriter sw = new SimpleWriter(conn);
+	public static Account ac = new Account(sw);
+	public static Reader r = new Reader(conn);
+
 	public static void main(String[] args) {
 
 		Scanner keyb = new Scanner(System.in);
-
 		State state = State.INDEX;
 
 		boolean quit = false;
@@ -324,35 +335,47 @@ public class cli {
 	/**
 	 * Checks if the credentials of the user are valid.
 	 * 
-	 * @param user
+	 * @param username
 	 * @param password
 	 * @return
 	 */
-	public static boolean isValidUser(String user, String password) {
-		return (user.equals(DEFAULT_USER) && password.equals(DEFAULT_PASS));
+	public static boolean isValidUser(String username, String password) {
+		return ac.loginUser(username, password) != -1;
 	}
 
 	/**
 	 * Checks if a user already exists in the database.
 	 * 
-	 * @param user
+	 * @param username
 	 * @return
 	 */
-	public static boolean isExistingUser(String user) {
-		return (user.equals(DEFAULT_USER));
+	public static boolean isExistingUser(String username) {
+		return ac.userExists(username);
 	}
 
 	public static void viewArtists() {
 		System.out.println("--- VIEWING ALL THE ARTISTS -- ");
+
 	}
 
 	public static void viewAlbums(int artist) {
 		System.out.println("--- VIEWING ALL ALBUMS for artist " + artist
 				+ " -- ");
+		
+		// TODO: change to songID
+		for (HashMap<String, String> h : r.getSongsFromAlbum(artist)) {
+			System.out.println(h.get("artist_id") + "\t" + h.get("name"));
+		}
+
 	}
 
-	public static void viewAlbum(int album) {
-		System.out.println("--- VIEWING ALL SONGS in album -- " + album + "--");
+	public static void viewAlbum(int albumID) {
+		System.out.println("--- VIEWING ALL SONGS in album -- " + albumID + "--");
+		
+		// TODO: change to artistID
+		for (String name : r.getAlbumsFromArtist(albumID)) {
+			System.out.println(name);
+		}
 	}
 
 	public static String addSongToAlbum(int album, String song, String link,
@@ -382,19 +405,18 @@ public class cli {
 	public static void viewPlaylist(int playlist) {
 		System.out.println("--- VIEWING ALL SONGS in playlist -- " + playlist
 				+ "--");
-	}
-
-	public static boolean doesUserLikePlaylist(String user, int playlist) {
-		return (playlist % 2 == 0);
+		r.getSongsFromPlaylist(playlist);
 	}
 
 	public static void likePlaylist(String user, int playlist) {
 		System.out.println("--- USER " + user + " likes playlist " + playlist);
+		sw.likePlaylistFromUser(playlist,user);
 	}
 
 	public static void unlikePlaylist(String user, int playlist) {
 		System.out
 				.println("--- USER " + user + " unlikes playlist " + playlist);
+		sw.unlikePlaylistFromUser(playlist,user);
 	}
 
 }

@@ -9,10 +9,10 @@ import java.util.List;
 public class Account {
 
 	private Connection conn = null;
-	private Writer w = null;
+	private SimpleWriter w = null;
 
-	public Account(Writer w) {
-		this.conn = w.getConn();
+	public Account(SimpleWriter w) {
+		this.conn = w.getWriter().getConn();
 		this.w = w;
 	}
 
@@ -73,9 +73,8 @@ public class Account {
 			list.add(password);
 			
 			try {
-				w.addStringsToTable("users", list);
+				w.getWriter().addStringsToTable("users", list);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}

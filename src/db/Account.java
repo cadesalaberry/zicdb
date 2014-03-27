@@ -70,7 +70,7 @@ public class Account {
 	public boolean signUp(String username, String password) {
 		if (!userExists(username)) {
 			
-			String id = String.valueOf(getNextId("cs421g22.users"));
+			int id = getNextId("cs421g22.users");
 			ArrayList<Object> list = new ArrayList<Object>();
 			
 			list.add(id);

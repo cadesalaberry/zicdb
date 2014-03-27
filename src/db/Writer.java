@@ -82,7 +82,7 @@ public class Writer {
 		} finally {
 			// Closes the connection
 			pst.close();
-			res.close();
+			if (res != null ) res.close();
 			conn.close();
 		}
 
@@ -103,10 +103,15 @@ public class Writer {
 		for (int i = 0; i < values.size(); ++i) {
 			System.out.println(i);
 			Object o = values.get(i);
-			if (o instanceof String)
+			if (o instanceof String) {
+				System.out.println(o + " is a string.");
 				pst.setString(i + 1, (String) o);
-			else if (o instanceof Integer)
+			}
+			else if (o instanceof Integer) {
+
+				System.out.println(o + " is an int.");
 				pst.setInt(i + 1, (Integer) o);
+			}
 		}
 
 		return pst;

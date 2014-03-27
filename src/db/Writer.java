@@ -15,7 +15,7 @@ import java.util.List;
 public class Writer {
 
 	private Connection conn = null;
-	
+
 	public Writer(Connection connection) {
 		conn = connection;
 	}
@@ -36,8 +36,8 @@ public class Writer {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int addToTable(String tbName, List<Object> values,
-			String returning) throws SQLException {
+	public int addToTable(String tbName, List<Object> values, String returning)
+			throws SQLException {
 
 		PreparedStatement pst = null;
 		ResultSet res = null;
@@ -85,8 +85,7 @@ public class Writer {
 
 		return id;
 	}
-	
-	
+
 	/**
 	 * Fills in the {@link PreparedStatement} according to their types.
 	 * 
@@ -118,8 +117,9 @@ public class Writer {
 	 * @param returning
 	 * @return
 	 */
-	private String prepareInsertQuery(String tbName, int size, String returning) {
-		//
+	public static String prepareInsertQuery(String tbName, int size,
+			String returning) {
+		
 		String query = "";
 
 		query += "INSERT INTO " + tbName + " VALUES (?";
@@ -135,5 +135,13 @@ public class Writer {
 		}
 
 		return query;
+	}
+
+	public Connection getConn() {
+		return conn;
+	}
+
+	public void setConn(Connection conn) {
+		this.conn = conn;
 	}
 }

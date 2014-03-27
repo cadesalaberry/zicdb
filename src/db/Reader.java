@@ -14,7 +14,7 @@ public class Reader {
 	private Connection conn = null;
 
 	public Reader(Connection connection) {
-		conn = connection;
+		this.conn = connection;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class Reader {
 	 * @param hList
 	 * @return
 	 */
-	private List<String> getColumnFromHashList(String colName,
+	public static List<String> getColumnFromHashList(String colName,
 			List<HashMap<String, String>> hList) {
 
 		List<String> list = new ArrayList<String>();
@@ -141,7 +141,7 @@ public class Reader {
 	 * @param rs
 	 * @return
 	 */
-	private List<HashMap<String, String>> resultSetToHashList(ResultSet rs) {
+	public static List<HashMap<String, String>> resultSetToHashList(ResultSet rs) {
 
 		List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 

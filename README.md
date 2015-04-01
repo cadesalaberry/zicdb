@@ -13,7 +13,7 @@ A database project aiming to gather links to songs from the web using postgreSQL
 
 ## Relational Schema
 
-You can access the visual schema on http://bit.ly/ecse421-project-schema.
+You can access the visual schema on http://cadesalaberry.github.io/zicdb/.
 
 	Entities:
 
